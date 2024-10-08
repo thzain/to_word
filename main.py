@@ -5,10 +5,10 @@ from doc import open_folder, convert_data
 from excel_data import *
 
 
-if __name__ == "__main__":
+def main():
     # 创建主窗口
     root = tk.Tk()
-    root.title("Folder Opener")
+    root.title("to_word")
 
     # 设置窗口大小
     root.geometry("600x300")
@@ -20,7 +20,7 @@ if __name__ == "__main__":
     folder_label.pack(pady=20)
 
     # 创建一个按钮，点击时会调用open_folder函数
-    open_button = tk.Button(root, text="Open Folder", command=lambda: open_folder(file_path))
+    open_button = tk.Button(root, text="选择文件", command=lambda: open_folder(file_path))
     open_button.pack(pady=10)
 
     log_text = tk.Text(root, height=10)
@@ -37,3 +37,13 @@ if __name__ == "__main__":
 
     # 运行主事件循环
     root.mainloop()
+
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    log_text = tk.Text(root, height=10)
+    file_path = tk.StringVar()
+    # file_path.set('： ./data/20240905-原始测试数据.xls')
+    file_path.set('： ./data/第一轮修改/test2.xls')
+    convert_data(file_path, log_text)
+    # main()

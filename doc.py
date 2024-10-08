@@ -1,10 +1,8 @@
 import docx
 import os
-from docx import document
-from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.enum.table import WD_ALIGN_VERTICAL
-from docx.oxml.ns import qn
-from docx.shared import Pt, Cm
+
+
+from docx import Document
 from docx import document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.enum.table import WD_ALIGN_VERTICAL
@@ -20,9 +18,10 @@ def new_page(doc_in, page_index, in_data):
 
     if page_index != 1:
         doc_in.add_page_break()
+        doc_in.add_section()
 
     # 2.添加 表格
-    table = doc_in.add_table(rows=25, cols=10)
+    table = doc_in.add_table(rows=24, cols=10)
 
     # 设置表格的线条为细线条
     table.style = 'Table Grid'
@@ -65,9 +64,9 @@ def new_page(doc_in, page_index, in_data):
         for cell in row.cells:
             for paragraph in cell.paragraphs:
                 for run in paragraph.runs:
-                    run.font.name = 'SimSun'
-                    run._element.rPr.rFonts.set(qn('w:eastAsia'), 'SimSun')
-                    run.font.size = Pt(10.5)
+                    run.font.name = '宋体'
+                    # run._element.rPr.rFonts.set(qn('w:eastAsia'), '宋体')
+                    run.font.size = Pt(12)
 
     # 设置第一二行高为 1.42cm
     for row in table.rows[:2]:
@@ -89,7 +88,8 @@ def new_page(doc_in, page_index, in_data):
     for i, data in enumerate(in_data):
         for j, value in enumerate(data):
             print(f"正在第{page_index}页 第{i}行 第{j}列")
-            table.cell(i + 2, write_col[j]).text = value
+            table.cell(i + 2, write_col[j]).text = str(value)
+
 
     return doc_in
 
@@ -100,9 +100,9 @@ def write_doc(save_path, in_data, element_log):
     assert isinstance(doc, document.Document)  # 格式：doc, doc 的类型
 
     # 每次写几行
-    write_page_row = 23
+    write_page_row = 22
     # 判断传几次
-    page_num = len(in_data) // write_page_row
+    page_num = len(in_data) // write_page_row + 1
     for i in range(page_num):
         element_log.insert('end', f'正在写入第{i + 1}页-----共{page_num}页\n')
         # 刷新主窗口
@@ -110,14 +110,17 @@ def write_doc(save_path, in_data, element_log):
         element_log.see('end')
         doc = new_page(doc, i + 1, in_data[i * write_page_row: (i + 1) * write_page_row])
 
-    # 循环每一页，添加页眉
+    # 循环每一节，添加页眉
     page_all = len(doc.sections)
     for page_index, section in enumerate(doc.sections):
         header = section.header
+        header.is_linked_to_previous = False
         header_paragraph = header.paragraphs[0]
-        header_paragraph.text = f"共 {page_all} 页  第 {page_index} 页"
+        page_h = f"共 {page_all} 页  第 {page_index + 1} 页"
+        print(page_h)
+        header_paragraph.text = page_h
         header_paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-        # 设置字体大小为 12
+        # 设置字体大小为 8.5
         for run in header_paragraph.runs:
             run.font.size = Pt(8.5)
 
@@ -129,6 +132,7 @@ def write_doc(save_path, in_data, element_log):
         # 设置字体大小为 8.5
         for run in footer_paragraph.runs:
             run.font.size = Pt(8.5)
+
 
     doc.save(save_path)
 
