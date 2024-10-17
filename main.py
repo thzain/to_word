@@ -40,10 +40,10 @@ def main():
 
 
 if __name__ == "__main__":
-    root = tk.Tk()
-    log_text = tk.Text(root, height=10)
-    file_path = tk.StringVar()
-    # file_path.set('： ./data/20240905-原始测试数据.xls')
-    file_path.set('： ./data/第一轮修改/test2.xls')
-    convert_data(file_path, log_text)
-    # main()
+    # root = tk.Tk()
+    # log_text = tk.Text(root, height=10)
+    # file_path = tk.StringVar()
+    # # file_path.set('： ./data/20240905-原始测试数据.xls')
+    # file_path.set('： ./data/第一轮修改/test2.xls')
+    # convert_data(file_path, log_text)
+    main()

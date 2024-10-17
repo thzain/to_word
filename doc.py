@@ -10,7 +10,7 @@ from docx.oxml.ns import qn
 from docx.shared import Pt, Cm
 from tkinter import filedialog
 from tkinter import messagebox
-
+import re
 from excel_data import *
 
 
@@ -162,7 +162,36 @@ def convert_data(file_path_in, element_log):
     # 转为二维数组
     out_data = []
     for col in res_in:
+        # 如果 col.requirement 含有最大或最小，取出数值与col.result进行比较，然后修改 col.assessment 的值
+        if "最大" in col.requirement:
+            # 正则匹配数值
+            num = re.findall(r"\d+\.?\d*", col.requirement)
+            if num:
+                try:
+                    num = float(num[0])
+                    res_num = float(col.result)
+                    if res_num > num and col.result != "":
+                        col.assessment = 'F'
+                except ValueError:
+                    col.assessment = ''
+            else:
+                col.assessment = ''
+
+        if "最小" in col.requirement:
+            # 正则匹配数值
+            num = re.findall(r"\d+\.?\d*", col.requirement)
+            if num:
+                try:
+                    num = float(num[0])
+                    res_num = float(col.result)
+                    if res_num < num and col.result != "":
+                        col.assessment = 'F'
+                except ValueError:
+                    col.assessment = ''
+            else:
+                col.assessment = ''
         out_data.append([col.seq, col.item, col.unit, col.requirement, col.result, col.assessment])
+
 
     # 输出地址
     # put_path = './output.docx'

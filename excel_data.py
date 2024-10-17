@@ -81,7 +81,7 @@ def clean_data(file_path_in):
     res_data.append(col_empty)
 
     # 下面写入其他数据
-    seq_new = 2.1
+    seq_new = 2.0
     for sheet in excel_data.sheets_data[2:]:
 
         # 情况1  工作表有几个数据，就打印几行；（衰减和相时延）
@@ -109,10 +109,10 @@ def clean_data(file_path_in):
                     if seq_new_case:
                         col = ColValue()
                         # 保留一个小数
+                        seq_new += 0.1
                         seq_new_str = round(seq_new, 1)
                         col.item = item
                         col.seq = str(seq_new_str)
-                        seq_new += 0.1
                         seq_new_case = False
                         res_data.append(col)
 
