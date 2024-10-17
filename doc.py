@@ -59,15 +59,6 @@ def new_page(doc_in, page_index, in_data):
         table.cell(i + 2, 1).merge(table.cell(i + 2, 3))
         table.cell(i + 2, 6).merge(table.cell(i + 2, 8))
 
-    # 设置字体为宋体，小四
-    for row in table.rows:
-        for cell in row.cells:
-            for paragraph in cell.paragraphs:
-                for run in paragraph.runs:
-                    run.font.name = '宋体'
-                    # run._element.rPr.rFonts.set(qn('w:eastAsia'), '宋体')
-                    run.font.size = Pt(12)
-
     # 设置第一二行高为 1.42cm
     for row in table.rows[:2]:
         row.height = Cm(1.5)
@@ -89,6 +80,15 @@ def new_page(doc_in, page_index, in_data):
         for j, value in enumerate(data):
             print(f"正在第{page_index}页 第{i}行 第{j}列")
             table.cell(i + 2, write_col[j]).text = str(value)
+
+    # 设置字体为宋体，小四
+    for row in table.rows:
+        for cell in row.cells:
+            for paragraph in cell.paragraphs:
+                for run in paragraph.runs:
+                    run.font.name = '宋体'
+                    run._element.rPr.rFonts.set(qn('w:eastAsia'), u'宋体')
+                    run.font.size = Pt(12)
 
 
     return doc_in
@@ -122,6 +122,9 @@ def write_doc(save_path, in_data, element_log):
         header_paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
         # 设置字体大小为 8.5
         for run in header_paragraph.runs:
+            # 设置字体为宋体
+            run.font.name = '宋体'
+            run._element.rPr.rFonts.set(qn('w:eastAsia'), u'宋体')
             run.font.size = Pt(8.5)
 
         # 添加页脚
@@ -131,6 +134,9 @@ def write_doc(save_path, in_data, element_log):
         footer_paragraph.alignment = WD_ALIGN_PARAGRAPH.LEFT
         # 设置字体大小为 8.5
         for run in footer_paragraph.runs:
+            # 设置字体为宋体
+            run.font.name = '宋体'
+            run._element.rPr.rFonts.set(qn('w:eastAsia'), u'宋体')
             run.font.size = Pt(8.5)
 
 
